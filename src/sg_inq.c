@@ -219,6 +219,7 @@ static struct option long_options[] = {
         {"new", no_argument, 0, 'N'},
         {"old", no_argument, 0, 'O'},
 #endif
+        {"only", no_argument, 0, 'o'},
         {"page", required_argument, 0, 'p'},
         {"raw", no_argument, 0, 'r'},
         {"vendor", no_argument, 0, 's'},
@@ -237,6 +238,7 @@ struct opts_t {
     bool do_decode;
     bool do_vpd;
     bool p_given;
+    bool skip_vpd;
     int do_block;
     int do_cmddt;
     int do_help;
@@ -421,18 +423,18 @@ cl_new_process(struct opts_t * op, int argc, char * argv[])
 
 #ifdef SG_LIB_LINUX
 #ifdef SG_SCSI_STRINGS
-        c = getopt_long(argc, argv, "aB:cdeEfhHiI:l:m:NOp:rsuvVx",
+        c = getopt_long(argc, argv, "aB:cdeEfhHiI:l:m:NOop:rsuvVx",
                         long_options, &option_index);
 #else
-        c = getopt_long(argc, argv, "B:cdeEfhHiI:l:m:p:rsuvVx", long_options,
+        c = getopt_long(argc, argv, "B:cdeEfhHiI:l:m:op:rsuvVx", long_options,
                         &option_index);
 #endif /* SG_SCSI_STRINGS */
 #else  /* SG_LIB_LINUX */
 #ifdef SG_SCSI_STRINGS
-        c = getopt_long(argc, argv, "B:cdeEhHiI:l:m:NOp:rsuvVx", long_options,
+        c = getopt_long(argc, argv, "B:cdeEhHiI:l:m:NOop:rsuvVx", long_options,
                         &option_index);
 #else
-        c = getopt_long(argc, argv, "B:cdeEhHiI:l:m:p:rsuvVx", long_options,
+        c = getopt_long(argc, argv, "B:cdeEhHiI:l:m:op:rsuvVx", long_options,
                         &option_index);
 #endif /* SG_SCSI_STRINGS */
 #endif /* SG_LIB_LINUX */
@@ -478,6 +480,9 @@ cl_new_process(struct opts_t * op, int argc, char * argv[])
             break;
         case 'h':
             ++op->do_help;
+            break;
+        case 'o':
+            op->skip_vpd = true;
             break;
         case '?':
             if (! op->do_help)
@@ -3218,7 +3223,7 @@ std_inq_process(int sg_fd, const struct opts_t * op, int inhex_len)
             act_len = rlen - resid;
         if (act_len < SAFE_STD_INQ_RESP_LEN)
             rsp_buff[act_len] = '\0';
-        if ((! op->do_export) && (0 == op->resp_len)) {
+        if ((! op->skip_vpd) && (! op->do_export) && (0 == op->resp_len)) {
             if (fetch_unit_serial_num(sg_fd, usn_buff, sizeof(usn_buff),
                                       op->do_verbose))
                 usn_buff[0] = '\0';

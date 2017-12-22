@@ -7,14 +7,15 @@ sg_inq \- issue SCSI INQUIRY command and/or decode its response
 [\fI\-\-descriptors\fR] [\fI\-\-export\fR] [\fI\-\-extended\fR]
 [\fI\-\-force\fR] [\fI\-\-help\fR] [\fI\-\-hex\fR] [\fI\-\-id\fR]
 [\fI\-\-inhex=FN\fR] [\fI\-\-len=LEN\fR] [\fI\-\-maxlen=LEN\fR]
-[\fI\-\-page=PG\fR] [\fI\-\-raw\fR] [\fI\-\-vendor\fR] [\fI\-\-verbose\fR]
-[\fI\-\-version\fR] [\fI\-\-vpd\fR] \fIDEVICE\fR
+[\fI\-\-only\fR] [\fI\-\-page=PG\fR] [\fI\-\-raw\fR]
+[\fI\-\-vendor\fR] [\fI\-\-verbose\fR] [\fI\-\-version\fR]
+[\fI\-\-vpd\fR] \fIDEVICE\fR
 .PP
 .B sg_inq
 [\fI\-36\fR] [\fI\-a\fR] [\fI\-A\fR] [\fI\-b\fR] [\fI\-\-B=0|1\fR]
 [\fI\-c\fR] [\fI\-cl\fR] [\fI\-d\fR] [\fI\-e\fR] [\fI\-f\fR]
 [\fI\-h\fR] [\fI\-H\fR] [\fI\-i\fR] [\fI\-I=FN\fR] [\fI\-l=LEN\fR]
-[\fI\-m\fR] [\fI\-M\fR] [\fI\-o=OPCODE_PG\fR] [\fI\-p=VPD_PG\fR]
+[\fI\-m\fR] [\fI\-M\fR] [\fI\-o\fR] [\fI\-p=VPD_PG\fR]
 [\fI\-P\fR] [\fI\-r\fR] [\fI\-s\fR] [\fI\-u\fR] [\fI\-v\fR]
 [\fI\-V\fR] [\fI\-x\fR] [\fI\-36\fR] [\fI\-?\fR] \fIDEVICE\fR
 .SH DESCRIPTION
@@ -171,6 +172,9 @@ utilities.
 .TP
 \fB\-O\fR, \fB\-\-old\fR
 Switch to older style options. Please use as first option.
+.TP
+\fB\-o\fR, \fB\-\-only\fR
+Do not attempt to retrieve serial number VPD page 0x80.
 .TP
 \fB\-p\fR, \fB\-\-page\fR=\fIPG\fR
 the \fIPG\fR argument can be either a number of an abbreviation for a VPD
