@@ -3137,6 +3137,16 @@ fetch_unit_serial_num(int sg_fd, char * obuff, int obuff_len, int verbose)
     int len, k, res, c;
     unsigned char b[DEF_ALLOC_LEN];
 
+    res = vpd_fetch_page_from_dev(sg_fd, b, VPD_SUPPORTED_VPDS,
+                                  -1,verbose, &len);
+    if (res) {
+        if (verbose > 2)
+            pr2serr("fetch_unit_serial_num: no supported VPDs page\n");
+        return SG_LIB_CAT_MALFORMED;
+    }
+    if (!vpd_page_is_supported(b, len, VPD_UNIT_SERIAL_NUM))
+        return SG_LIB_CAT_ILLEGAL_REQ;
+
     memset(b, 0xff, 4); /* guard against empty response */
     res = vpd_fetch_page_from_dev(sg_fd, b, VPD_UNIT_SERIAL_NUM, -1, verbose,
                                   &len);
